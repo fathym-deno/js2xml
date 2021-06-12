@@ -1,5 +1,22 @@
-var helper = require('./options-helper');
-var isArray = require('./array-helper').isArray;
+/*
+ * Copyright 2021, alex at staticlibs.net
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// adapted from: https://github.com/nashwaan/xml-js
+
+import helper from './options-helper.js';
 
 var currentElement, currentElementName;
 
@@ -282,7 +299,7 @@ function writeElementsCompact(element, options, depth, firstLine) {
   var i, key, nodes, xml = [];
   for (key in element) {
     if (element.hasOwnProperty(key)) {
-      nodes = isArray(element[key]) ? element[key] : [element[key]];
+      nodes = Array.isArray(element[key]) ? element[key] : [element[key]];
       for (i = 0; i < nodes.length; ++i) {
         switch (key) {
         case options.declarationKey: xml.push(writeDeclaration(nodes[i], options, depth)); break;
@@ -301,7 +318,7 @@ function writeElementsCompact(element, options, depth, firstLine) {
   return xml.join('');
 }
 
-module.exports = function (js, options) {
+export default function(js, options) {
   options = validateOptions(options);
   var xml = [];
   currentElement = js;
