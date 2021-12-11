@@ -9,7 +9,7 @@ Usage example
 -------------
 
 ```
-import { js2xml } from "https://deno.land/x/deno_js2xml@1.0.1/mod.js";
+import { js2xml } from "https://deno.land/x/js2xml@1.0.1/mod.js";
 
 const obj = {
   foo: "bar",
