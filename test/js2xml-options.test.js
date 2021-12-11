@@ -16,9 +16,9 @@
 
 // adapted from: https://github.com/nashwaan/xml-js
 
-import { js2xml } from "../mod.js";
+import { js2xml } from "../mod.ts";
 
-import { expect, describe, it } from "./test-deps.js";
+import { expect, describe, it } from "./test-deps.ts";
 import testItems from "./test-items.js";
 
 // compat

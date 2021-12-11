@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-export {
-  describe,
-  expect,
-  it,
-} from "https://raw.githubusercontent.com/notranspile-js/deno-test-compat/1.0.0/mod.js";
+export type { Js2XmlOptions } from "./options.ts";
+import js2xml from "./js2xml.ts";
+export { js2xml };

@@ -14,5 +14,8 @@
  * limitations under the License.
  */
 
-import js2xml from "./js2xml.js";
-export { js2xml };
+export {
+  describe,
+  expect,
+  it,
+} from "https://deno.land/x/notranspile_test_compat@1.0.1/mod.js";
