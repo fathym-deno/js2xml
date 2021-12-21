@@ -18,4 +18,4 @@ export {
   describe,
   expect,
   it,
-} from "https://deno.land/x/notranspile_test_compat@1.0.1/mod.js";
+} from "https://deno.land/x/notranspile_test_compat@1.0.2/mod.js";
