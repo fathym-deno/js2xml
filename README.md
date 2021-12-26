@@ -3,7 +3,9 @@ Convert JavaScript objects to XML
 
 `js2xml` utility ported to Deno from [xml-js](https://github.com/nashwaan/xml-js) library.
 
-This library has no dependencies, parsing XML into objects is NOT supported. 
+This library has no dependencies. 
+
+See [https://deno.land/x/xml2js] for parsing XML into objects.
 
 Usage example
 -------------
