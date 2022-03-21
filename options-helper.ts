@@ -20,7 +20,7 @@ export default {
   copyOptions: function (options: Record<string, unknown>) {
     const copy: Record<string, unknown> = {};
     for (const key in options) {
-      if (options.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(options, key)) {
         copy[key] = options[key];
       }
     }

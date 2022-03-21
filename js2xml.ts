@@ -75,7 +75,7 @@ function writeAttributes(
   const result = [];
   for (key in attributes) {
     if (
-      attributes.hasOwnProperty(key) && attributes[key] !== null &&
+      Object.prototype.hasOwnProperty.call(attributes, key) && attributes[key] !== null &&
       attributes[key] !== undefined
     ) {
       quote = options.noQuotesForNativeAttributes &&
@@ -130,7 +130,7 @@ function writeInstruction(
   }
   let key;
   for (key in instruction) {
-    if (instruction.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(instruction, key)) {
       break;
     }
   }
@@ -347,7 +347,7 @@ function hasContentCompact(
 ) {
   let key;
   for (key in element) {
-    if (element.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(element, key)) {
       switch (key) {
         case options.parentKey:
         case options.attributesKey:
@@ -447,7 +447,7 @@ function writeElementsCompact(
 ) {
   let i, key, nodes: unknown[], xml = [];
   for (key in element) {
-    if (element.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(element, key)) {
       nodes = (Array.isArray(element[key])
         ? element[key]
         : [element[key]]) as unknown[];
