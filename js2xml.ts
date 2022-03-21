@@ -83,6 +83,9 @@ function writeAttributes(
         ? ""
         : '"';
       attr = "" + attributes[key]; // ensure number and boolean are converted to String
+      attr = attr.replace(/&/g, "&amp;");
+      attr = attr.replace(/</g, "&lt;");
+      attr = attr.replace(/>/g, "&gt;");
       attr = attr.replace(/"/g, "&quot;");
       attrName = key;
       result.push(

@@ -11,7 +11,7 @@ Usage example
 -------------
 
 ```
-import { js2xml } from "https://deno.land/x/js2xml@1.0.1/mod.ts";
+import { js2xml } from "https://deno.land/x/js2xml@1.0.3/mod.ts";
 
 const obj = {
   foo: {

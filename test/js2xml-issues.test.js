@@ -471,3 +471,19 @@ describe('case by Nathan Perry', function() {
   });
 });
 
+describe('escape special characters', function() {
+  // see n/a
+  const js = {
+    foo: {
+      _attributes: {
+        bar: "& < > \""
+      },
+      _text: "& < >"
+    },
+  };
+  const xml =
+  '<foo bar="&amp; &lt; &gt; &quot;">&amp; &lt; &gt;</foo>';
+  it ('should escape special characters', function() {
+    expect(convert.js2xml(js, {compact: true, spaces: 2})).toEqual(xml);
+  });
+});
