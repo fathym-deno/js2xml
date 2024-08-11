@@ -9,6 +9,7 @@
     "build:fmt": "deno fmt",
     "build:lint": "deno lint",
     "deploy": "deno task build && ftm git",
-    "publish:check": "deno publish --dry-run --allow-dirty"
+    "publish:check": "deno publish --dry-run --allow-dirty",
+    "version": "deno run -A jsr:@fathym/common@0.0.211/version"
   }
 }
