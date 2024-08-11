@@ -17,9 +17,9 @@
 // adapted from: https://github.com/nashwaan/xml-js
 
 import helper from "./options-helper.ts";
-import { Js2XmlOptions } from "./options.ts";
+import type { Js2XmlOptions } from "./options.ts";
 
-let currentElement: unknown, currentElementName: string;
+let _currentElement: unknown, _currentElementName: string;
 
 function validateOptions(userOptions: Record<string, unknown>) {
   const options = helper.copyOptions(userOptions);
@@ -59,8 +59,10 @@ function writeIndentation(
   depth: number,
   firstLine: boolean,
 ) {
-  return (!firstLine && options.spaces ? "\n" : "") +
-    Array(depth + 1).join(options.spaces as string);
+  return (
+    (!firstLine && options.spaces ? "\n" : "") +
+    Array(depth + 1).join(options.spaces as string)
+  );
 }
 
 function writeAttributes(
@@ -75,7 +77,8 @@ function writeAttributes(
   const result = [];
   for (key in attributes) {
     if (
-      Object.prototype.hasOwnProperty.call(attributes, key) && attributes[key] !== null &&
+      Object.prototype.hasOwnProperty.call(attributes, key) &&
+      attributes[key] !== null &&
       attributes[key] !== undefined
     ) {
       quote = options.noQuotesForNativeAttributes &&
@@ -89,15 +92,17 @@ function writeAttributes(
       attr = attr.replace(/"/g, "&quot;");
       attrName = key;
       result.push(
-        (options.spaces && options.indentAttributes
+        options.spaces && options.indentAttributes
           ? writeIndentation(options, depth + 1, false)
-          : " "),
+          : " ",
       );
       result.push(attrName + "=" + quote + attr + quote);
     }
   }
   if (
-    attributes && Object.keys(attributes).length && options.spaces &&
+    attributes &&
+    Object.keys(attributes).length &&
+    options.spaces &&
     options.indentAttributes
   ) {
     result.push(writeIndentation(options, depth, false));
@@ -110,14 +115,19 @@ function writeDeclaration(
   options: Record<string, unknown>,
   depth: number,
 ) {
-  currentElement = declaration;
-  currentElementName = "xml";
-  return options.ignoreDeclaration ? "" : "<?" + "xml" +
+  _currentElement = declaration;
+  _currentElementName = "xml";
+  return options.ignoreDeclaration ? "" : "<?" +
+    "xml" +
     writeAttributes(
-      declaration[options.attributesKey as string] as Record<string, unknown>,
+      declaration[options.attributesKey as string] as Record<
+        string,
+        unknown
+      >,
       options,
       depth,
-    ) + "?>";
+    ) +
+    "?>";
 }
 
 function writeInstruction(
@@ -136,24 +146,30 @@ function writeInstruction(
   }
   const instructionName = key;
   if (typeof instruction[key as string] === "object") {
-    currentElement = instruction;
-    currentElementName = instructionName as string;
-    return "<?" + instructionName +
+    _currentElement = instruction;
+    _currentElementName = instructionName as string;
+    return (
+      "<?" +
+      instructionName +
       writeAttributes(
         (instruction[key as string] as Record<string, unknown>)[
           options.attributesKey as string
         ] as Record<string, unknown>,
         options,
         depth,
-      ) + "?>";
+      ) +
+      "?>"
+    );
   } else {
     const instructionValue = instruction[key as string]
       ? instruction[key as string]
       : "";
-    return "<?" + instructionName + (instructionValue
-      ? " " + instructionValue
-      : "") +
-      "?>";
+    return (
+      "<?" +
+      instructionName +
+      (instructionValue ? " " + instructionValue : "") +
+      "?>"
+    );
   }
 }
 
@@ -175,10 +191,10 @@ function writeText(text: string, options: Record<string, unknown>) {
   if (options.ignoreText) return "";
   text = "" + text; // ensure Number and Boolean are converted to String
   text = text.replace(/&amp;/g, "&"); // desanitize to avoid double sanitization
-  text = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(
-    />/g,
-    "&gt;",
-  );
+  text = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
   return text;
 }
 
@@ -226,9 +242,10 @@ function writeElement(
   options: Record<string, unknown>,
   depth: number,
 ) {
-  currentElement = element;
-  currentElementName = element.name as string;
-  const xml = [], elementName = element.name;
+  _currentElement = element;
+  _currentElementName = element.name as string;
+  const xml = [],
+    elementName = element.name;
   xml.push("<" + elementName);
   if (element[options.attributesKey as string]) {
     xml.push(
@@ -239,12 +256,12 @@ function writeElement(
       ),
     );
   }
-  let withClosingTag = element[options.elementsKey as string] &&
-      (element[options.elementsKey as string] as unknown[]).length ||
-    element[options.attributesKey as string] &&
+  let withClosingTag = (element[options.elementsKey as string] &&
+    (element[options.elementsKey as string] as unknown[]).length) ||
+    (element[options.attributesKey as string] &&
       (element[options.attributesKey as string] as Record<string, unknown>)[
           "xml:space"
-        ] === "preserve";
+        ] === "preserve");
   if (!withClosingTag) {
     withClosingTag = options.fullTagEmptyElement;
   }
@@ -262,8 +279,8 @@ function writeElement(
           false,
         ),
       );
-      currentElement = element;
-      currentElementName = element.name as string;
+      _currentElement = element;
+      _currentElementName = element.name as string;
     }
     xml.push(
       options.spaces && hasContent(element, options)
@@ -287,54 +304,73 @@ function writeElements(
     const indent = writeIndentation(options, depth, firstLine && !xml);
     switch ((element as Record<string, unknown>).type) {
       case "element":
-        return xml + indent +
-          writeElement((element as Record<string, unknown>), options, depth);
+        return (
+          xml +
+          indent +
+          writeElement(element as Record<string, unknown>, options, depth)
+        );
       case "comment":
-        return xml + indent +
+        return (
+          xml +
+          indent +
           writeComment(
             (element as Record<string, unknown>)[
               options.commentKey as string
             ] as string,
             options,
-          );
+          )
+        );
       case "doctype":
-        return xml + indent +
+        return (
+          xml +
+          indent +
           writeDoctype(
             (element as Record<string, unknown>)[
               options.doctypeKey as string
             ] as string,
             options,
-          );
+          )
+        );
       case "cdata":
-        return xml + (options.indentCdata ? indent : "") +
+        return (
+          xml +
+          (options.indentCdata ? indent : "") +
           writeCdata(
             (element as Record<string, unknown>)[
               options.cdataKey as string
             ] as string,
             options,
-          );
+          )
+        );
       case "text":
-        return xml + (options.indentText ? indent : "") +
+        return (
+          xml +
+          (options.indentText ? indent : "") +
           writeText(
             (element as Record<string, unknown>)[
               options.textKey as string
             ] as string,
             options,
-          );
+          )
+        );
       case "instruction": {
         const instruction: Record<string, unknown> = {};
         instruction[
           (element as Record<string, unknown>)[
             options.nameKey as string
           ] as string
-        ] =
-          (element as Record<string, unknown>)[options.attributesKey as string]
-            ? element
-            : (element as Record<string, unknown>)[
-              options.instructionKey as string
-            ];
-        return xml + (options.indentInstruction ? indent : "") +
-          writeInstruction(instruction, options, depth);
+        ] = (element as Record<string, unknown>)[
+            options.attributesKey as string
+          ]
+          ? element
+          : (element as Record<string, unknown>)[
+            options.instructionKey as string
+          ];
+        return (
+          xml +
+          (options.indentInstruction ? indent : "") +
+          writeInstruction(instruction, options, depth)
+        );
       }
     }
   }, "") as string;
@@ -385,12 +421,13 @@ function writeElementCompact(
   depth: number,
   indent: boolean,
 ): string {
-  currentElement = element;
-  currentElementName = name;
+  _currentElement = element;
+  _currentElementName = name;
   const elementName = name;
   if (
-    typeof element === "undefined" || element === null ||
-    element as unknown === ""
+    typeof element === "undefined" ||
+    element === null ||
+    (element as unknown) === ""
   ) {
     return options.fullTagEmptyElement
       ? "<" + elementName + "></" + elementName + ">"
@@ -413,10 +450,10 @@ function writeElementCompact(
       );
     }
     let withClosingTag = hasContentCompact(element, options, true) ||
-      element[options.attributesKey as string] &&
+      (element[options.attributesKey as string] &&
         (element[options.attributesKey as string] as Record<string, unknown>)[
             "xml:space"
-          ] === "preserve";
+          ] === "preserve");
     if (!withClosingTag) {
       withClosingTag = options.fullTagEmptyElement;
     }
@@ -428,12 +465,14 @@ function writeElementCompact(
     }
   }
   xml.push(writeElementsCompact(element, options, depth + 1, false));
-  currentElement = element;
-  currentElementName = name;
+  _currentElement = element;
+  _currentElementName = name;
   if (name) {
     xml.push(
-      (indent ? writeIndentation(options, depth, false) : "") + "</" +
-        elementName + ">",
+      (indent ? writeIndentation(options, depth, false) : "") +
+        "</" +
+        elementName +
+        ">",
     );
   }
   return xml.join("");
@@ -445,12 +484,14 @@ function writeElementsCompact(
   depth: number,
   firstLine: boolean,
 ) {
-  let i, key, nodes: unknown[], xml = [];
+  let i, key, nodes: unknown[];
+  const xml = [];
+
   for (key in element) {
     if (Object.prototype.hasOwnProperty.call(element, key)) {
-      nodes = (Array.isArray(element[key])
-        ? element[key]
-        : [element[key]]) as unknown[];
+      nodes = (
+        Array.isArray(element[key]) ? element[key] : [element[key]]
+      ) as unknown[];
       for (i = 0; i < nodes.length; ++i) {
         switch (key) {
           case options.declarationKey:
@@ -529,11 +570,11 @@ function writeElementsCompact(
 export default function (
   js: Record<string, unknown>,
   options: Js2XmlOptions,
-) {
+): string {
   options = validateOptions(options);
   const xml = [];
-  currentElement = js;
-  currentElementName = "_root_";
+  _currentElement = js;
+  _currentElementName = "_root_";
   if (options.compact) {
     xml.push(writeElementsCompact(js, options, 0, true));
   } else {

@@ -1,0 +1,14 @@
+{
+  "name": "@fathym/js2xml",
+  "version": "0.0.0",
+  "exports": {
+    ".": "./mod.ts"
+  },
+  "tasks": {
+    "build": "deno task build:fmt && deno task build:lint && deno task publish:check",
+    "build:fmt": "deno fmt",
+    "build:lint": "deno lint",
+    "deploy": "deno task build && ftm git",
+    "publish:check": "deno publish --dry-run --allow-dirty"
+  }
+}

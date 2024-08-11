@@ -1,14 +1,13 @@
-Convert JavaScript objects to XML
-=================================
+# Convert JavaScript objects to XML
 
-`js2xml` utility ported to Deno from [xml-js](https://github.com/nashwaan/xml-js) library.
+`js2xml` utility ported to Deno from
+[xml-js](https://github.com/nashwaan/xml-js) library.
 
-This library has no dependencies. 
+This library has no dependencies.
 
 See [https://deno.land/x/xml2js] for parsing XML into objects.
 
-Usage example
--------------
+## Usage example
 
 ```
 import { js2xml } from "https://deno.land/x/js2xml@1.0.3/mod.ts";
@@ -48,7 +47,7 @@ Output:
 </foo>
 ```
 
-License information
--------------------
+## License information
 
-This project is released under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+This project is released under the
+[Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
