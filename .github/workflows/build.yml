@@ -7,7 +7,7 @@ permissions:
 on: push
 
 env:
-  MainBranch: main
+  MainBranch: master
   MainFormat: '${major}.${minor}.${patch}'
 
 jobs:
